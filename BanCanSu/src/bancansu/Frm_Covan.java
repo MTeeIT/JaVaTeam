@@ -60,10 +60,7 @@ public class Frm_Covan extends javax.swing.JFrame {
         tableCoVan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String []
             {
