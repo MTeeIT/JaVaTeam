@@ -5,6 +5,8 @@
  */
 package bancansu;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Administrator
@@ -25,8 +27,7 @@ public class frm_admin extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
@@ -38,15 +39,15 @@ public class frm_admin extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        MenuAddBoMon = new javax.swing.JMenuItem();
+        MenuAddLop = new javax.swing.JMenuItem();
+        MenuAddCVHT = new javax.swing.JMenuItem();
+        MenuAddSV = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        MenuFillterBoMon = new javax.swing.JMenuItem();
+        MenuFillterLop = new javax.swing.JMenuItem();
+        MenuFillterCVHT = new javax.swing.JMenuItem();
+        MenuFillterSV = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
 
@@ -65,32 +66,25 @@ public class frm_admin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
 
             },
-            new String []
-            {
+            new String [] {
                 "STT", "Mã lớp", "Tên ban cán sự", "Chức vụ", "Email"
             }
-        )
-        {
-            Class[] types = new Class []
-            {
+        ) {
+            Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean []
-            {
+            boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex)
-            {
+            public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
@@ -98,40 +92,53 @@ public class frm_admin extends javax.swing.JFrame {
 
         jMenu1.setText("Thêm mới");
 
-        jMenuItem1.setText("Bộ môn");
-        jMenu1.add(jMenuItem1);
-
-        jMenuItem2.setText("Lớp");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                jMenuItem2ActionPerformed(evt);
+        MenuAddBoMon.setText("Bộ môn");
+        MenuAddBoMon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuAddBoMonActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(MenuAddBoMon);
 
-        jMenuItem3.setText("Cố vấn học tập");
-        jMenu1.add(jMenuItem3);
+        MenuAddLop.setText("Lớp");
+        MenuAddLop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuAddLopActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuAddLop);
 
-        jMenuItem4.setText("Sinh Viên");
-        jMenu1.add(jMenuItem4);
+        MenuAddCVHT.setText("Cố vấn học tập");
+        MenuAddCVHT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuAddCVHTActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuAddCVHT);
+
+        MenuAddSV.setText("Sinh Viên");
+        MenuAddSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuAddSVActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuAddSV);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Lọc danh sách");
 
-        jMenuItem5.setText("Bộ môn");
-        jMenu2.add(jMenuItem5);
+        MenuFillterBoMon.setText("Bộ môn");
+        jMenu2.add(MenuFillterBoMon);
 
-        jMenuItem6.setText("Lớp");
-        jMenu2.add(jMenuItem6);
+        MenuFillterLop.setText("Lớp");
+        jMenu2.add(MenuFillterLop);
 
-        jMenuItem7.setText("Cố vấn học tập");
-        jMenu2.add(jMenuItem7);
+        MenuFillterCVHT.setText("Cố vấn học tập");
+        jMenu2.add(MenuFillterCVHT);
 
-        jMenuItem8.setText("Sinh viên");
-        jMenu2.add(jMenuItem8);
+        MenuFillterSV.setText("Sinh viên");
+        jMenu2.add(MenuFillterSV);
 
         jMenuBar1.add(jMenu2);
 
@@ -160,9 +167,26 @@ public class frm_admin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    private void MenuAddLopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAddLopActionPerformed
+        this.setVisible(true);
+        new fmr_lop().setVisible(true);
+        
+    }//GEN-LAST:event_MenuAddLopActionPerformed
+
+    private void MenuAddBoMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAddBoMonActionPerformed
+        this.setVisible(true);
+        new frm_bomon().setVisible(true);
+    }//GEN-LAST:event_MenuAddBoMonActionPerformed
+
+    private void MenuAddCVHTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAddCVHTActionPerformed
+        this.setVisible(true);
+        new Frm_Covan().setVisible(true);
+    }//GEN-LAST:event_MenuAddCVHTActionPerformed
+
+    private void MenuAddSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAddSVActionPerformed
+        this.setVisible(true);
+        new frm_SinhVien().setVisible(true);
+    }//GEN-LAST:event_MenuAddSVActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,6 +224,14 @@ public class frm_admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenuAddBoMon;
+    private javax.swing.JMenuItem MenuAddCVHT;
+    private javax.swing.JMenuItem MenuAddLop;
+    private javax.swing.JMenuItem MenuAddSV;
+    private javax.swing.JMenuItem MenuFillterBoMon;
+    private javax.swing.JMenuItem MenuFillterCVHT;
+    private javax.swing.JMenuItem MenuFillterLop;
+    private javax.swing.JMenuItem MenuFillterSV;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -211,14 +243,6 @@ public class frm_admin extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
