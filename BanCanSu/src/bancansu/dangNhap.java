@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -34,6 +36,9 @@ public class dangNhap extends javax.swing.JFrame {
     public dangNhap() {
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        JRootPane rootPane = SwingUtilities.getRootPane(btnDangNhap); 
+        rootPane.setDefaultButton(btnDangNhap);
     }
     
     @SuppressWarnings("deprecation")
@@ -57,7 +62,11 @@ public class dangNhap extends javax.swing.JFrame {
         }
     }  
     
-
+    public void setDangXuat()
+    {
+        tfTenDangNhap.setText("");
+        pwMatKhau.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -176,8 +185,7 @@ public class dangNhap extends javax.swing.JFrame {
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         //---------Lệnh Truy Vấn---------\\
-        String sql = "select * from user where username = '" + tfTenDangNhap.getText() + "' and password = '" + pwMatKhau.getText() + "'" ;
-        System.out.println(sql);
+        String sql = "select * from user where username = '" + tfTenDangNhap.getText() + "' and password = '" + pwMatKhau.getText()+ "'" ;
         int countRow = 0;
         this.connect();
         
@@ -201,7 +209,9 @@ public class dangNhap extends javax.swing.JFrame {
         //---------Kiem tra co du lieu---------\\
         if(countRow > 0)
         {
-            JOptionPane.showMessageDialog(rootPane, "Đăng Nhập Thành Công");
+            this.setVisible(false);
+            frm_admin fr = new frm_admin(this);
+            fr.setVisible(true);
         }
         else
         {

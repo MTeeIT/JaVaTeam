@@ -5,21 +5,93 @@
  */
 package bancansu;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Administrator
  */
 public class frm_admin extends javax.swing.JFrame {
-
+    private String userName = "root";//datausername
+    private String password = "";//datapassuser
+    private String url = "jdbc:mysql://127.0.0.1:3306/quanlybcs";	
+    private Connection conn = null;
+    private Statement state;
+    private ResultSet rs;
+    private dangNhap form;
     /**
      * Creates new form frm_admin
      */
+    public frm_admin(dangNhap form) {
+        initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.form = form;
+        hienDuLieu();
+    }
     public frm_admin() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        hienDuLieu();
     }
+    
+    @SuppressWarnings("deprecation")
+    public void connect()
+    {
+        try
+        {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                try
+                {
+                    conn = DriverManager.getConnection (url,userName, password);
+                }catch(Exception e)
+                {
+                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+                }
 
+        }
+        catch(Exception e)
+        {
+                JOptionPane.showMessageDialog(rootPane, "Không load được Driver!");
+        }
+    }  
+    
+    public void hienDuLieu()
+    {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        
+         //---------Lệnh Truy Vấn---------\\
+        String sql = "select * from sinhvien, lop, covanhoctap, bomon where sinhvien.MaLop = lop.MaLop and sinhvien.MaCV = covanhoctap.MaCV and lop.MaBoMon = bomon.MaBoMon " ;
+        System.out.println(sql);
+        this.connect();
+        
+        //---------Truy Vấn---------\\
+        try {
+                state = conn.createStatement();
+                rs = state.executeQuery(sql);
+                int i = 1;
+                while(rs.next())
+                {
+                    model.addRow(new Object[]{ i, rs.getString("MaLop"), rs.getString("MaSV"), rs.getString("HoTen_SV"), rs.getString("ChucVu_SV") , rs.getString("Email_SV")  });
+                    i++;
+                }
+        } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+        } finally {
+            try {
+                    conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,14 +142,14 @@ public class frm_admin extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã lớp", "Tên ban cán sự", "Chức vụ", "Email"
+                "STT", "Mã lớp", "Mã sinh viên", "Tên ban cán sự", "Chức vụ", "Email sinh viên"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -88,7 +160,20 @@ public class frm_admin extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+            jTable1.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         jMenu1.setText("Thêm mới");
 
@@ -146,6 +231,11 @@ public class frm_admin extends javax.swing.JFrame {
         jMenuBar1.add(jMenu7);
 
         jMenu8.setText("Đăng xuất");
+        jMenu8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu8MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu8);
 
         setJMenuBar(jMenuBar1);
@@ -188,6 +278,20 @@ public class frm_admin extends javax.swing.JFrame {
         new frm_SinhVien().setVisible(true);
     }//GEN-LAST:event_MenuAddSVActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int row_index = jTable1.getSelectedRow();
+        String maSV = (String) jTable1.getModel().getValueAt(row_index, 2);
+        frm_hienThiTTSV fr = new frm_hienThiTTSV(this, maSV);
+        
+        fr.setVisible(true);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jMenu8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu8MouseClicked
+        this.form.setDangXuat();
+        this.form.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenu8MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -216,10 +320,8 @@ public class frm_admin extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frm_admin().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new frm_admin().setVisible(true);
         });
     }
 
