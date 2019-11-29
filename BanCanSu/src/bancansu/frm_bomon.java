@@ -15,7 +15,7 @@ public final class frm_bomon extends javax.swing.JFrame {
     private boolean clickTable = false;
     private String userName = "root";//datausername
     private String password = "";//datapassuser
-    private String url = "jdbc:mysql://127.0.0.1:3306/quanlybcs";	
+    private String url = "jdbc:mysql://127.0.0.1:3306/quanlybcs?useUnicode=true&characterEncoding=utf-8";	
     private Connection conn = null;
     private Statement state;
     private ResultSet rs;
@@ -227,7 +227,6 @@ public final class frm_bomon extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("Mã bộ môn:");
 
-        tfMaBoMon.setText("110117064");
         tfMaBoMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfMaBoMonActionPerformed(evt);
@@ -266,8 +265,18 @@ public final class frm_bomon extends javax.swing.JFrame {
         );
 
         btnXoa.setText("Xoá");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         btnSua.setText("Sửa");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -395,6 +404,69 @@ public final class frm_bomon extends javax.swing.JFrame {
         tfMaBoMon.setText(maBoMon);
         tfTenBoMon.setText(TenBoMon);
     }//GEN-LAST:event_tableBoMonMouseClicked
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        if(clickTable)
+        {
+            String sql = "update bomon set TenBoMon=N'"+ tfTenBoMon.getText() +"' where MaBoMon = '" + tfMaBoMon.getText() + "'";
+            System.out.println(sql);
+            this.connect();
+            //---------Update---------\\
+                try {
+                        state = conn.createStatement();
+                        int kq  = state.executeUpdate(sql);
+                        if(kq > 0)
+                            JOptionPane.showMessageDialog(rootPane, "Cập nhật thành công!");
+                        else JOptionPane.showMessageDialog(rootPane, "Cập nhật không thành công!!");
+                } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+                } finally {
+                    try {
+                            conn.close();
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+
+                    }
+                }
+
+            hienThiDuLieu();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+        }
+        
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        if(clickTable)
+        {
+            String sql = "delete from bomon where MaBoMon='" + tfMaBoMon.getText() + "'";
+            this.connect();
+            //---------Delete---------\\
+                try {
+                        state = conn.createStatement();
+                        int kq  = state.executeUpdate(sql);
+                        if(kq > 0)
+                            JOptionPane.showMessageDialog(rootPane, "Xóa thành công!");
+                        else JOptionPane.showMessageDialog(rootPane, "Xóa không thành công!!");
+                } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+                } finally {
+                    try {
+                            conn.close();
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+
+                    }
+                }
+            hienThiDuLieu();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
 
     public static void main(String args[])
