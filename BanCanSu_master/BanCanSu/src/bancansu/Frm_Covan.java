@@ -161,8 +161,28 @@ public class Frm_Covan extends javax.swing.JFrame {
             }
         }
     }
+    public String getMaFromMySQL(String tenBang, String tenTruong, String value, String tenTruongCanLay)
+    {
+        String sql = "select * from " + tenBang + " where "+ tenTruong +" = '" + value + "'";
+        this.connect();
+        try{
+            state = conn.createStatement();
+            rs = state.executeQuery(sql);
+            while(rs.next()){
+                return rs.getString(tenTruongCanLay);
+            }
+        } catch(Exception e){ JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");}
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+            }
+        }
+        return "";
+    }
     
-        public boolean themMoi()
+    public boolean themMoi()
     {
         if(tonTaiMaCoVan(tfMaCoVan.getText()))
         {
@@ -174,6 +194,7 @@ public class Frm_Covan extends javax.swing.JFrame {
 //            String sql = "insert into covanhoctap values('" + tfMaCoVan.getText() + "', N'" + tfTenCoVan.getText() 
 //                    + "', '" + cbTenBoMon.getSelectedItem().toString() +"', '" + tfSDT.getText() + "', '" + tfEmail.getText() + "')" ;
             String sql = "insert into covanhoctap (MaCV, HoTen_CV, SDT_CV, Email_CV, MaBoMon)" + " value(?,?,?,?,?)";
+            String tenBoMon = cbTenBoMon.getSelectedItem().toString();
             this.connect();
 
             //---------Truy Vấn---------\\
@@ -183,7 +204,7 @@ public class Frm_Covan extends javax.swing.JFrame {
                 preStmt.setString (2, tfTenCoVan.getText());
                 preStmt.setString (3, tfSDT.getText());
                 preStmt.setString (4, tfEmail.getText());
-                preStmt.setString (5, cbTenBoMon.getSelectedItem().toString());
+                preStmt.setString (5, this.getMaFromMySQL("bomon", "TenBoMon", tenBoMon, "MaBoMon"));
                 int kq  = preStmt.executeUpdate();
                     if(kq > 0)
                         return true;
@@ -515,9 +536,11 @@ public class Frm_Covan extends javax.swing.JFrame {
         int row_index = tableCoVan.getSelectedRow();
         String maCoVan = (String) tableCoVan.getModel().getValueAt(row_index, 1);
         String TenCoVan = (String) tableCoVan.getModel().getValueAt(row_index, 2);
-        //COMBOBOX
         String SDT = (String) tableCoVan.getModel().getValueAt(row_index, 3);
         String Email = (String) tableCoVan.getModel().getValueAt(row_index, 4);
+        String tenBoMon =  (String) tableCoVan.getModel().getValueAt(row_index, 5);
+        cbTenBoMon.setSelectedItem(tenBoMon);
+
         
         tfMaCoVan.setText(maCoVan);
         tfTenCoVan.setText(TenCoVan);
@@ -529,8 +552,9 @@ public class Frm_Covan extends javax.swing.JFrame {
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         if(clickTable)
         {
+            String maBoMon = getMaFromMySQL("bomon", "TenBoMon", cbTenBoMon.getSelectedItem().toString(), "MaBoMon");
             String sql = "update covanhoctap set HoTen_CV=N'"+ tfTenCoVan.getText() +"', SDT_CV='" + tfSDT.getText() + 
-                    "', Email_CV='" + tfEmail.getText() +"' where MaCV = '" + tfMaCoVan.getText() + "'";
+                    "', Email_CV='" + tfEmail.getText() +"', MaBoMon='" + maBoMon + "' where MaCV = '" + tfMaCoVan.getText() + "'";
             System.out.println(sql);
             this.connect();
             //---------Update---------\\
@@ -583,6 +607,13 @@ public class Frm_Covan extends javax.swing.JFrame {
                     }
                 }
             hienThiDuLieu();
+            tfMaCoVan.enable(true);
+            tfMaCoVan.setEditable(true);
+            tfMaCoVan.setText("");
+            tfTenCoVan.setText("");
+            tfSDT.setText("");
+            tfEmail.setText("");
+            clickTable = false; 
         }
         else
         {

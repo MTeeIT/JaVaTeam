@@ -641,6 +641,12 @@ if(clickTable)
                     }
                 }
             hienThiDuLieu();
+            tfMaLop.enable(true);
+            tfMaLop.setEditable(true);
+            tfMaLop.setText("");
+            tfTenLop.setText("");
+            tfEmail.setText("");
+            clickTable = false;  
         }
         else
         {

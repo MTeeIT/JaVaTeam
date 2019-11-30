@@ -211,6 +211,11 @@ public class frm_admin extends javax.swing.JFrame {
             }
         });
         jTable1.setRowHeight(22);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -398,6 +403,13 @@ public class frm_admin extends javax.swing.JFrame {
         frm_doimatkhau fr = new frm_doimatkhau(this);
         fr.setVisible(true);
     }//GEN-LAST:event_jMenu7MouseClicked
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int row_index = jTable1.getSelectedRow();
+        String maSV = (String) jTable1.getModel().getValueAt(row_index, 2);
+        frm_hienThiTTSV fr = new frm_hienThiTTSV(this, maSV);
+        fr.setVisible(true);
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments

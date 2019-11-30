@@ -5,12 +5,27 @@
  */
 package bancansu;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author shamm
  */
 public class frm_doimatkhau extends javax.swing.JFrame {
+    private String userName = "root";//datausername
+    private String password = "";//datapassuser
+    private String url = "jdbc:mysql://127.0.0.1:3306/quanlybcs";	
+    private Connection conn = null;
+    private Statement state;
+    private ResultSet rs;
 
+    
     private final frm_admin formAdmin;
     /**
      * Creates new form frm_doimatkhau
@@ -19,10 +34,30 @@ public class frm_doimatkhau extends javax.swing.JFrame {
     public frm_doimatkhau(frm_admin form) {
         initComponents();
         this.formAdmin = form;
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(this.formAdmin);
     }
     
+     @SuppressWarnings("deprecation")
+    public void connect()
+    {
+        try
+        {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                try
+                {
+                    conn = DriverManager.getConnection (url,userName, password);
+                }catch(Exception e)
+                {
+                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+                }
 
+        }
+        catch(Exception e)
+        {
+                JOptionPane.showMessageDialog(rootPane, "Không load được Driver!");
+        }
+    }  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -136,7 +171,37 @@ public class frm_doimatkhau extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
-        //---------Lệnh Truy Vấn---------\\
+        String sql = "select * from user where username='admin'" ;
+        this.connect();
+        
+        //---------Truy Vấn---------\\
+        try {
+                state = conn.createStatement();
+                rs = state.executeQuery(sql);
+                while(rs.next())
+                {
+                   if(rs.getString("password").equals(pwHienTai.getText()))
+                   {
+                       sql = "update user set password ='" + pwMoi.getText() + "' where username='admin'";
+                       int kq = state.executeUpdate(sql);
+                       if(kq>0)
+                           JOptionPane.showMessageDialog(rootPane, "Cập nhật thành công");
+                       else JOptionPane.showMessageDialog(rootPane, "Cập nhật không thành công");
+                       this.dispose();
+                       return;
+                   }
+                }
+                JOptionPane.showMessageDialog(rootPane, "Cập nhật không thành công! Sai mật khẩu.");
+        } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+        } finally {
+            try {
+                    conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+
+            }
+        }
         
     }//GEN-LAST:event_btnXacNhanActionPerformed
 

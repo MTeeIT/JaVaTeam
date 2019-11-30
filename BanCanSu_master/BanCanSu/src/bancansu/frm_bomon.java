@@ -484,6 +484,11 @@ public final class frm_bomon extends javax.swing.JFrame {
                     }
                 }
             hienThiDuLieu();
+            tfMaBoMon.enable(true);
+            tfMaBoMon.setEditable(true);
+            tfMaBoMon.setText("");
+            tfTenBoMon.setText("");
+            clickTable = false;
         }
         else
         {
