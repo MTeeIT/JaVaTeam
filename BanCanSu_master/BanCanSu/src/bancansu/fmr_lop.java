@@ -549,8 +549,11 @@ if(!this.clickTable)
         int row_index = tableLop.getSelectedRow();
         String maLop = (String) tableLop.getModel().getValueAt(row_index, 1);
         String TenLop = (String) tableLop.getModel().getValueAt(row_index, 2);
-        //COMBOBOX
         String Email = (String) tableLop.getModel().getValueAt(row_index, 3);
+        String tenBoMon =  (String) tableLop.getModel().getValueAt(row_index, 4);
+        String tenCoVan =  (String) tableLop.getModel().getValueAt(row_index, 5);
+        cbBoMon.setSelectedItem(tenBoMon);
+        cbCoVan.setSelectedItem(tenCoVan);
         
         tfMaLop.setText(maLop);
         tfTenLop.setText(TenLop);

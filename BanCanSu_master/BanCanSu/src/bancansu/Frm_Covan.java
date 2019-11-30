@@ -87,7 +87,7 @@ public class Frm_Covan extends javax.swing.JFrame {
         lamRongTable(model);
         
          //---------Lệnh Truy Vấn---------\\
-        String sql = "select * from covanhoctap" ;
+        String sql = "select * from covanhoctap, bomon where covanhoctap.MaBoMon = bomon.MaBoMon" ;
         this.connect();
         
         //---------Truy Vấn---------\\
@@ -97,7 +97,7 @@ public class Frm_Covan extends javax.swing.JFrame {
                 int i = 1;
                 while(rs.next())
                 {
-                    model.addRow(new Object[]{ i, rs.getString("MaCV"), rs.getString("HoTen_CV"), rs.getString("SDT_CV"), rs.getString("Email_CV"), rs.getString("MaBoMon") });
+                    model.addRow(new Object[]{ i, rs.getString("MaCV"), rs.getString("HoTen_CV"), rs.getString("SDT_CV"), rs.getString("Email_CV"), rs.getString("TenBoMon") });
                     i++;
                 }
         } catch (SQLException e) {
@@ -149,7 +149,7 @@ public class Frm_Covan extends javax.swing.JFrame {
             while(rs.next()){
                 String TenBM = rs.getString("TenBoMon");
                 String MaBM = rs.getString("MaBoMon");
-                cbTenBoMon.addItem(MaBM);
+                cbTenBoMon.addItem(TenBM);
                 
             }
         } catch(Exception e){JOptionPane.showMessageDialog(null,"Failed to Item-List..!"); e.printStackTrace(); return;}
