@@ -7,7 +7,6 @@ package bancansu;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -85,8 +84,8 @@ public class fmr_lop extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableLop.getModel();
         lamRongTable(model);
         
-         //---------Lệnh Truy Vấn---------\\
-        String sql = "select * from lop" ;
+          //---------Lệnh Truy Vấn---------\\
+        String sql = "select * from lop, bomon, covanhoctap where lop.MaBoMon = bomon.MaBoMon and covanhoctap.MaCV = lop.MaCV" ;
         this.connect();
         
         //---------Truy Vấn---------\\
@@ -96,7 +95,7 @@ public class fmr_lop extends javax.swing.JFrame {
                 int i = 1;
                 while(rs.next())
                 {
-                    model.addRow(new Object[]{ i, rs.getString("MaLop"), rs.getString("TenLop"), rs.getString("EmailLop"), rs.getString("MaBoMon"), rs.getString("MaCV") });
+                    model.addRow(new Object[]{ i, rs.getString("MaLop"), rs.getString("TenLop"), rs.getString("EmailLop"), rs.getString("TenBoMon"), rs.getString("HoTen_CV") });
                     i++;
                 }
         } catch (SQLException e) {
@@ -147,7 +146,7 @@ public class fmr_lop extends javax.swing.JFrame {
                 String TenBM = rs.getString("TenBoMon");
                 String MaBM = rs.getString("MaBoMon");
                 
-                cbBoMon.addItem(MaBM);
+                cbBoMon.addItem(TenBM);
             }
         } catch(Exception e){JOptionPane.showMessageDialog(null,"Failed to Item-List..!"); e.printStackTrace(); return;}
         finally {
@@ -168,7 +167,7 @@ public class fmr_lop extends javax.swing.JFrame {
             while(rs.next()){
                 String TenCV = rs.getString("HoTen_CV");
                 String MaCV = rs.getString("MaCV");
-                cbCoVan.addItem(MaCV);
+                cbCoVan.addItem(TenCV);
             }
         } catch(Exception e){JOptionPane.showMessageDialog(null,"Failed to Item-List..!"); e.printStackTrace(); return;}
         finally {
@@ -181,55 +180,50 @@ public class fmr_lop extends javax.swing.JFrame {
     }
     public boolean themMoi()
     {
+
         if(tonTaiMaLop(tfMaLop.getText()))
         {
             return false;
         }
         else
         {
-             if(tonTaiMaLop(tfMaLop.getText()))
-            {
-                return false;
-            }
-            else
-            {
-                String tenBoMon = cbBoMon.getSelectedItem().toString();
-                String tenCoVan = cbCoVan.getSelectedItem().toString();
-                String maBoMon = this.getMaFromMySQL("bomon", "TenBoMon", tenBoMon, "MaBoMon");
-                String maCoVan = this.getMaFromMySQL("covanhoctap", "HoTen_CV", tenCoVan, "MaCV");
-                String malop = tfMaLop.getText();
-                String tenLop = tfTenLop.getText();
-                String emailLop = tfEmail.getText();
-                 //---------Lệnh Truy Vấn---------\\
-                String sql = "insert into lop " + " values('" + malop + "'," + "N'" + tenLop + "'," + "'";
-                sql += emailLop + "'," + "'" + maBoMon + "',"+ "'" + maCoVan + "')";
-                System.out.println(sql);
-                this.connect();
+            String tenBoMon = cbBoMon.getSelectedItem().toString();
+            String tenCoVan = cbCoVan.getSelectedItem().toString();
+            String maBoMon = this.getMaFromMySQL("bomon", "TenBoMon", tenBoMon, "MaBoMon");
+            String maCoVan = this.getMaFromMySQL("covanhoctap", "HoTen_CV", tenCoVan, "MaCV");
+            String malop = tfMaLop.getText();
+            String tenLop = tfTenLop.getText();
+            String emailLop = tfEmail.getText();
+             //---------Lệnh Truy Vấn---------\\
+            String sql = "insert into lop " + " values('" + malop + "'," + "N'" + tenLop + "'," + "'";
+            sql += emailLop + "'," + "'" + maBoMon + "',"+ "'" + maCoVan + "')";
+            System.out.println(sql);
+            this.connect();
 
-                //---------Truy Vấn---------\\
+            //---------Truy Vấn---------\\
+            try {
+//                PreparedStatement preStmt = conn.prepareStatement(sql);
+//                preStmt.setString (1, tfMaLop.getText());
+//                preStmt.setString (2, tfTenLop.getText());
+//                preStmt.setString (3, tfEmail.getText());
+//                preStmt.setString (4, cbBoMon.getSelectedItem().toString());
+//                preStmt.setString (5, cbCoVan.getSelectedItem().toString());
+                state = conn.createStatement();
+                int kq  = state.executeUpdate(sql);
+                //int kq  = preStmt.executeUpdate();
+                    if(kq > 0)
+                        return true;
+                    else return false;
+            } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(rootPane, e);
+            } finally {
                 try {
-    //                PreparedStatement preStmt = conn.prepareStatement(sql);
-    //                preStmt.setString (1, tfMaLop.getText());
-    //                preStmt.setString (2, tfTenLop.getText());
-    //                preStmt.setString (3, tfEmail.getText());
-    //                preStmt.setString (4, cbBoMon.getSelectedItem().toString());
-    //                preStmt.setString (5, cbCoVan.getSelectedItem().toString());
-                    state = conn.createStatement();
-                    int kq  = state.executeUpdate(sql);
-                    //int kq  = preStmt.executeUpdate();
-                        if(kq > 0)
-                            return true;
-                        else return false;
+                        conn.close();
                 } catch (SQLException e) {
-                        JOptionPane.showMessageDialog(rootPane, e);
-                } finally {
-                    try {
-                            conn.close();
-                    } catch (SQLException e) {
-                        JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
+                    JOptionPane.showMessageDialog(rootPane, "Lỗi kết nối CSDL");
 
-                    }
                 }
+            }
         }
         return false;
     }
